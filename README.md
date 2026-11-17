@@ -63,8 +63,6 @@ The exact screens may differ slightly; DataPipe's own docs are at https://pipe.j
 5. Paste the ID into `js/config.js` (`DATAPIPE_EXPERIMENT_ID: "…"`), then commit and push. While the ID is empty, the live site shows a "data collection paused" notice instead of the task.
 6. **Pilot:** run the live link once yourself without `?test=1`. A file `<random-id>.csv` should appear in the Drive folder within a few seconds. Delete it afterwards.
 
-> **About OSF.** DataPipe stopped writing to OSF on 16 November 2026, when OSF shut down its projects feature. Data already collected there stays in your OSF account. If uploads failed after the cutoff, check the old experiment's DataPipe dashboard: it keeps failed files for up to 7 days, and you can download them there.
-
 > `?test=1` always skips DataPipe, so test runs never end up in your data.
 
 ---
@@ -118,7 +116,7 @@ The exclusion and analysis rules are in the proposal (Bab 3.3 and 3.6).
 
 ## 6. Before you launch: checklist
 
-- [ ] `config.js`: new DataPipe experiment ID (Google Drive) filled in; contact already set
+- [x] `config.js`: DataPipe experiment ID (Google Drive) and contact filled in
 - [ ] `index.html`: `irfankur` replaced
 - [ ] Word lists checked against the Sianipar et al. (2016) Indonesian norms (valence, frequency); edit them in `js/stimuli.js` **and** the proposal's Tabel 3.2
 - [ ] GAD-7 wording: the items in `js/experiment.js` are a working translation. If you get the validated Indonesian text (Budikayanti et al., 2019), paste it in
