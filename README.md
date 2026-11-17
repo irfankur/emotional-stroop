@@ -1,6 +1,6 @@
 # Emotional Stroop Task (Bahasa Indonesia), online
 
-A free online experiment built with **jsPsych 8**. It is hosted on **GitHub Pages**, and **DataPipe** saves each participant's data to **OSF**. It works on phones, tablets (portrait and landscape), laptops and PCs. The participant confirms how they will answer (**keyboard** A/S/K/L, or **touch** buttons), and the detected option is marked as recommended. Keyboard keys are always accepted, so tablets with keyboards and touch laptops also work. Each trial records which input was actually used (`response_source`).
+A free online experiment built with **jsPsych 8**. It is hosted on **GitHub Pages**, and **DataPipe** saves each participant's data to your **Google Drive**. It works on phones, tablets (portrait and landscape), laptops and PCs. The participant confirms how they will answer (**keyboard** A/S/K/L, or **touch** buttons), and the detected option is marked as recommended. Keyboard keys are always accepted, so tablets with keyboards and touch laptops also work. Each trial records which input was actually used (`response_source`).
 
 Session (~5 min): welcome → consent → device choice → demographics → instructions → 3-2-1 countdown → 5 practice trials (repeated once if fewer than 4 are correct) → 60 test trials in one session (each word once, no break) → GAD-7 → data saved (retries automatically; offers a backup download if the connection fails) → debrief with a "share with friends" button.
 
@@ -27,7 +27,7 @@ python -m http.server 8765 --directory emotional-stroop
 
 Then open these in your browser:
 
-- `http://localhost:8765/?test=1` is a short version (4 practice, 6 test trials). The CSV is **downloaded** to your computer instead of sent to OSF.
+- `http://localhost:8765/?test=1` is a short version (4 practice, 6 test trials). The CSV is **downloaded** to your computer instead of sent to DataPipe.
 - `http://localhost:8765/?test=1&input=touch` forces the phone layout.
 - `http://localhost:8765/` is the full version.
 
@@ -52,24 +52,20 @@ Then open these in your browser:
 
 ---
 
-## 3. Connect DataPipe → OSF (so data saves automatically)
+## 3. Connect DataPipe → Google Drive (so data saves automatically)
 
-The exact screens may differ slightly; DataPipe's own docs are at https://pipe.jspsych.org.
+The exact screens may differ slightly; DataPipe's own docs are at https://pipe.jspsych.org/docs.
 
-1. **OSF:** log in at https://osf.io and create a project, for example *Emotional Stroop UTS*. Keep it **private** while collecting data. The project ID is the 5-character code in its URL (`osf.io/abc12/` → `abc12`).
-2. **OSF token:** go to *OSF → Settings → Personal access tokens → Create token*, tick the `osf.full_write` scope, and copy the token.
-3. **DataPipe:** log in at https://pipe.jspsych.org, go to *Account*, and paste the OSF token.
-4. In DataPipe, click **Create new experiment**. Enter a title, your OSF project ID, and a name for the new data component (e.g. `data`). DataPipe creates that component inside your OSF project.
-5. On the experiment's page, switch **Enable data collection** ON, and copy the **Experiment ID**.
-6. Open `js/config.js` and paste the ID:
-   ```js
-   DATAPIPE_EXPERIMENT_ID: "PASTE-ID-HERE",
-   RESEARCHER_CONTACT: "your email or Instagram",
-   ```
-   Commit and push again.
-7. **Pilot:** run the live link once yourself without `?test=1`. A file `<random-id>.csv` should appear in the OSF data component within a few seconds. Then ask 2–3 friends to try it on different phones and laptops.
+1. **Sign-in:** if you sign in to DataPipe with OSF, add another sign-in method (Google, GitHub, ORCID or email) under *Account settings*. OSF sign-in is being retired, and without another method you can lose access to your experiments.
+2. **Connect storage:** in DataPipe's *Account settings*, connect **Google Drive**. This is the quickest option, and the data stays private in your own Drive. Dataverse (institutional) and Zenodo (public, with a DOI) are the other options.
+3. Click **Create new experiment**, give it a title, and choose Google Drive. DataPipe creates a folder for it in your Drive. Leave **Psych-DS metadata** off unless you need it: the setting locks after the first submission.
+4. On the experiment's page, switch **Enable data collection** ON, and copy the **Experiment ID**.
+5. Paste the ID into `js/config.js` (`DATAPIPE_EXPERIMENT_ID: "…"`), then commit and push. While the ID is empty, the live site shows a "data collection paused" notice instead of the task.
+6. **Pilot:** run the live link once yourself without `?test=1`. A file `<random-id>.csv` should appear in the Drive folder within a few seconds. Delete it afterwards.
 
-> `?test=1` always skips DataPipe, so test runs never pollute your OSF data.
+> **About OSF.** DataPipe stopped writing to OSF on 16 November 2026, when OSF shut down its projects feature. Data already collected there stays in your OSF account. If uploads failed after the cutoff, check the old experiment's DataPipe dashboard: it keeps failed files for up to 7 days, and you can download them there.
+
+> `?test=1` always skips DataPipe, so test runs never end up in your data.
 
 ---
 
@@ -98,7 +94,7 @@ Tips: ask people to do it **in a quiet place, in one go**, and **not to tell oth
 
 ## 5. Getting the data
 
-In the OSF data component, there is one CSV per participant: *Files → select all → Download as zip*. Each row is one jsPsych trial. For the analysis, filter on `task == "test"`.
+In the experiment's Google Drive folder there is one CSV per participant: select all files and download them. Each row is one jsPsych trial. For the analysis, filter on `task == "test"`.
 
 | Column | Meaning |
 |---|---|
@@ -122,10 +118,10 @@ The exclusion and analysis rules are in the proposal (Bab 3.3 and 3.6).
 
 ## 6. Before you launch: checklist
 
-- [x] `config.js`: DataPipe ID and your contact filled in
+- [ ] `config.js`: new DataPipe experiment ID (Google Drive) filled in; contact already set
 - [ ] `index.html`: `irfankur` replaced
 - [ ] Word lists checked against the Sianipar et al. (2016) Indonesian norms (valence, frequency); edit them in `js/stimuli.js` **and** the proposal's Tabel 3.2
 - [ ] GAD-7 wording: the items in `js/experiment.js` are a working translation. If you get the validated Indonesian text (Budikayanti et al., 2019), paste it in
 - [ ] Lecturer / ethics approval, if your course requires it
-- [ ] Pilot run: files arrive in OSF, and keyboard and phone both work
+- [ ] Pilot run: files arrive in Google Drive, and keyboard and phone both work
 - [ ] DataPipe data collection switched **ON**; switch it OFF when you finish
