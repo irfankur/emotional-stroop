@@ -5,11 +5,11 @@ window.STUDY_CONFIG = {
   // Experiment ID from https://pipe.jspsych.org (looks like "AbC123xYz").
   // Leave empty ("") while testing: data is then downloaded as a CSV
   // file on the device instead of being sent to OSF.
-  DATAPIPE_EXPERIMENT_ID: "",
+  DATAPIPE_EXPERIMENT_ID: "ZIUw1scSn5iS",
 
   // Shown on the consent and debrief pages.
   RESEARCHER_NAME: "Irfan Kurniawan",
-  RESEARCHER_CONTACT: "[isi email atau akun Instagram peneliti]",
+  RESEARCHER_CONTACT: "ipanikur66@gmail.com / 081298515327",
   INSTITUTION: "Fakultas Psikologi, Universitas Indonesia Maju",
 
   // Task timing (ms). Keep these in sync with the proposal (Bab 3.5).

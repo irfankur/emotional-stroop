@@ -122,7 +122,7 @@ The exclusion and analysis rules are in the proposal (Bab 3.3 and 3.6).
 
 ## 6. Before you launch: checklist
 
-- [ ] `config.js`: DataPipe ID and your contact filled in
+- [x] `config.js`: DataPipe ID and your contact filled in
 - [ ] `index.html`: `irfankur` replaced
 - [ ] Word lists checked against the Sianipar et al. (2016) Indonesian norms (valence, frequency); edit them in `js/stimuli.js` **and** the proposal's Tabel 3.2
 - [ ] GAD-7 wording: the items in `js/experiment.js` are a working translation. If you get the validated Indonesian text (Budikayanti et al., 2019), paste it in
