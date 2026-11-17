@@ -300,7 +300,7 @@
         ${
           INPUT === "touch"
             ? `<p>Ketuk <b>tombol nama warna</b> di bagian bawah layar. Pegang perangkat dengan nyaman dan siapkan kedua ibu jari.</p>${touchCaps()}`
-            : `<p>Tekan tombol keyboard berikut. Letakkan jari telunjuk dan jari tengah kedua tangan di atas <b>D, F, J, K</b>.</p>${keyCaps()}`
+            : `<p>Tekan tombol keyboard berikut. Letakkan dua jari tangan kiri di atas <b>A</b> dan <b>S</b>, serta dua jari tangan kanan di atas <b>K</b> dan <b>L</b>.</p>${keyCaps()}`
         }
         <ul class="clean">
           <li>Sebelum setiap kata muncul tanda <b>+</b>. Arahkan pandangan ke sana.</li>

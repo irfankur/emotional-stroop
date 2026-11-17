@@ -11,8 +11,8 @@ window.STIMULI = {
 
 // Ink colours, response keys (keyboard) and button labels (touch).
 window.COLORS = [
-  { name: "merah",  hex: "#ff4d4d", key: "d", label: "MERAH" },
-  { name: "hijau",  hex: "#35d14a", key: "f", label: "HIJAU" },
-  { name: "biru",   hex: "#4d8dff", key: "j", label: "BIRU" },
-  { name: "kuning", hex: "#ffd43b", key: "k", label: "KUNING" },
+  { name: "merah",  hex: "#ff4d4d", key: "a", label: "MERAH" },
+  { name: "hijau",  hex: "#35d14a", key: "s", label: "HIJAU" },
+  { name: "biru",   hex: "#4d8dff", key: "k", label: "BIRU" },
+  { name: "kuning", hex: "#ffd43b", key: "l", label: "KUNING" },
 ];

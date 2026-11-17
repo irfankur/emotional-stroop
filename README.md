@@ -1,6 +1,6 @@
 # Emotional Stroop Task (Bahasa Indonesia), online
 
-A free online experiment built with **jsPsych 8**. It is hosted on **GitHub Pages**, and **DataPipe** saves each participant's data to **OSF**. It works on phones, tablets (portrait and landscape), laptops and PCs. The participant confirms how they will answer (**keyboard** D/F/J/K, or **touch** buttons), and the detected option is marked as recommended. Keyboard keys are always accepted, so tablets with keyboards and touch laptops also work. Each trial records which input was actually used (`response_source`).
+A free online experiment built with **jsPsych 8**. It is hosted on **GitHub Pages**, and **DataPipe** saves each participant's data to **OSF**. It works on phones, tablets (portrait and landscape), laptops and PCs. The participant confirms how they will answer (**keyboard** A/S/K/L, or **touch** buttons), and the detected option is marked as recommended. Keyboard keys are always accepted, so tablets with keyboards and touch laptops also work. Each trial records which input was actually used (`response_source`).
 
 Session (~10 min): welcome → consent → device choice → demographics → instructions → 3-2-1 countdown → 16 practice trials (repeated once if accuracy < 75%) → 2 × 60 test trials with a break → GAD-7 → data saved (retries automatically; offers a backup download if the connection fails) → debrief with a "share with friends" button.
 
