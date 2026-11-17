@@ -2,7 +2,7 @@
 
 A free online experiment built with **jsPsych 8**. It is hosted on **GitHub Pages**, and **DataPipe** saves each participant's data to **OSF**. It works on phones, tablets (portrait and landscape), laptops and PCs. The participant confirms how they will answer (**keyboard** A/S/K/L, or **touch** buttons), and the detected option is marked as recommended. Keyboard keys are always accepted, so tablets with keyboards and touch laptops also work. Each trial records which input was actually used (`response_source`).
 
-Session (~10 min): welcome → consent → device choice → demographics → instructions → 3-2-1 countdown → 16 practice trials (repeated once if accuracy < 75%) → 2 × 60 test trials with a break → GAD-7 → data saved (retries automatically; offers a backup download if the connection fails) → debrief with a "share with friends" button.
+Session (~5 min): welcome → consent → device choice → demographics → instructions → 3-2-1 countdown → 5 practice trials (repeated once if fewer than 4 are correct) → 60 test trials in one session (each word once, no break) → GAD-7 → data saved (retries automatically; offers a backup download if the connection fails) → debrief with a "share with friends" button.
 
 ```
 emotional-stroop/
@@ -27,7 +27,7 @@ python -m http.server 8765 --directory emotional-stroop
 
 Then open these in your browser:
 
-- `http://localhost:8765/?test=1` is a short version (4 trials per block). The CSV is **downloaded** to your computer instead of sent to OSF.
+- `http://localhost:8765/?test=1` is a short version (4 practice, 6 test trials). The CSV is **downloaded** to your computer instead of sent to OSF.
 - `http://localhost:8765/?test=1&input=touch` forces the phone layout.
 - `http://localhost:8765/` is the full version.
 
@@ -84,7 +84,7 @@ The exact screens may differ slightly; DataPipe's own docs are at https://pipe.j
 
 Caption template (Bahasa Indonesia):
 
-> 🧠 **Bantu penelitian psikologi, cuma ±10 menit!**
+> 🧠 **Bantu penelitian psikologi, cuma ±5 menit!**
 > Kamu akan melihat kata-kata berwarna dan menebak **warnanya** secepat mungkin. Kedengarannya gampang… coba saja! 😄
 > ✅ Anonim, tanpa nama/nomor HP
 > ✅ Bisa di HP atau laptop (laptop lebih disarankan)
@@ -104,7 +104,7 @@ In the OSF data component, there is one CSV per participant: *Files → select a
 |---|---|
 | `subject_id` | random participant code |
 | `task` | `consent`, `demographics`, `practice`, `test`, `gad7`, … |
-| `block` | 1 or 2 (test trials) |
+| `block` | always 1 (one test session) |
 | `word`, `valence` | stimulus word and `negatif` / `positif` / `netral` |
 | `color`, `response`, `correct` | ink colour, answer given, true/false |
 | `rt` | reaction time in ms (on `test` rows; on other rows it is the time spent on that page) |

@@ -6,7 +6,7 @@
   const STIM = window.STIMULI;
   const params = new URLSearchParams(window.location.search);
 
-  // ?test=1 -> short version (4 trials per block, 4 practice); data downloaded locally
+  // ?test=1 -> short version (4 practice, 6 test trials); data downloaded locally
   const TEST_MODE = params.get("test") === "1";
   const USE_PIPE = !!CFG.DATAPIPE_EXPERIMENT_ID && !TEST_MODE;
 
@@ -17,8 +17,9 @@
   let INPUT = params.get("input") === "touch" || params.get("input") === "keyboard" ? params.get("input") : DETECTED;
 
   const N_PRACTICE = TEST_MODE ? 4 : CFG.PRACTICE_TRIALS;
-  const N_BLOCK = TEST_MODE ? 4 : 60;
-  const TOTAL_STEPS = 8 + N_PRACTICE + 2 * N_BLOCK; // pages + trials, for the progress bar
+  const N_TEST = TEST_MODE ? 6 : 60; // 20 words x 3 valences, each shown once
+  const TOTAL_STEPS = 7 + N_PRACTICE + N_TEST; // pages + trials, for the progress bar
+  const PASS_N = Math.ceil(CFG.PRACTICE_PASS_ACCURACY * N_PRACTICE); // correct answers needed
   let stepsDone = 0;
 
   const jsPsych = initJsPsych({
@@ -106,22 +107,20 @@
     data: Object.assign({ valence: valence }, extra),
   });
 
-  // Main task: each word shown twice, once per block, in two different colours.
+  // Main task: one session of 60 trials, each word shown once.
   // Words are shuffled per participant, so the word-colour pairing is random,
-  // while colour counts stay balanced (5 per colour, per category, per block).
-  const blocks = [[], []];
+  // while colour counts stay balanced (5 per colour per valence category).
+  const testItems = [];
   Object.keys(STIM).forEach((valence) => {
     R.shuffle(STIM[valence]).forEach((w, i) => {
-      blocks[0].push({ word: w, valence: valence, color: COLORS[i % 4].name });
-      blocks[1].push({ word: w, valence: valence, color: COLORS[(i + 2) % 4].name });
+      testItems.push({ word: w, valence: valence, color: COLORS[i % 4].name });
     });
   });
-  const blockTrials = (b) =>
-    R.shuffle(blocks[b])
-      .slice(0, N_BLOCK)
-      .map((t) => stroop(t.word, t.valence, t.color, { task: "test", block: b + 1 }));
+  const testTrials = R.shuffle(testItems)
+    .slice(0, N_TEST)
+    .map((t) => stroop(t.word, t.valence, t.color, { task: "test", block: 1 }));
 
-  // Practice: XXXXX strings, each colour equally often, with feedback; repeated once if < 75% correct.
+  // Practice: XXXXX strings in all colours, with feedback; repeated once if accuracy is below the pass level.
   let practiceRuns = 0;
   const practiceLoop = {
     timeline: [
@@ -146,7 +145,7 @@
         <h1>Tes Perhatian &amp; Emosi</h1>
         <p class="muted">Kata-kata berwarna akan muncul di layar. Tugas Anda sederhana: jawab <b>warnanya</b> secepat mungkin. Kedengarannya mudah&hellip;</p>
         <div class="facts">
-          <div class="fact"><b>&plusmn;10 menit</b><span>sekali jalan, tanpa jeda panjang</span></div>
+          <div class="fact"><b>&plusmn;5 menit</b><span>${N_PRACTICE} soal latihan + ${N_TEST} soal utama</span></div>
           <div class="fact"><b>Anonim</b><span>tanpa nama, email, atau nomor HP</span></div>
           <div class="fact"><b>Semua perangkat</b><span>HP, tablet, laptop, atau PC</span></div>
         </div>
@@ -170,7 +169,7 @@
         <h2>Persetujuan ikut serta</h2>
         <p>Penelitian ini dilakukan oleh <b>${CFG.RESEARCHER_NAME}</b> (${CFG.INSTITUTION}) untuk mempelajari <b>perhatian dan emosi</b>.</p>
         <ul class="clean">
-          <li>Anda akan menjawab warna kata-kata, lalu mengisi kuesioner singkat (7 pertanyaan).</li>
+          <li>Anda akan menjawab warna kata-kata (${N_PRACTICE} soal latihan dan ${N_TEST} soal utama), lalu mengisi kuesioner singkat (7 pertanyaan).</li>
           <li>Beberapa kata bermuatan emosi, misalnya tentang rasa takut atau kesedihan. Semuanya kata sehari-hari.</li>
           <li>Data bersifat <b>anonim</b> dan hanya dilaporkan secara kelompok untuk keperluan ilmiah.</li>
           <li>Partisipasi sukarela. Anda boleh berhenti kapan saja dengan menutup halaman.</li>
@@ -305,7 +304,8 @@
         <ul class="clean">
           <li>Sebelum setiap kata muncul tanda <b>+</b>. Arahkan pandangan ke sana.</li>
           <li>Jawab <b>secepat dan setepat mungkin</b>. Kesalahan sesekali itu wajar.</li>
-          <li>Pertama ada <b>latihan singkat</b> dengan tulisan XXXXX dan umpan balik benar/salah.</li>
+          <li>Pertama ada <b>${N_PRACTICE} soal latihan</b> dengan tulisan XXXXX dan umpan balik benar/salah. Jika kurang dari ${PASS_N} yang benar, latihan diulang satu kali.</li>
+          <li>Setelah itu ada <b>${N_TEST} soal utama</b> (sekitar 2 menit) tanpa jeda.</li>
         </ul>
       </div>`),
     ],
@@ -325,27 +325,14 @@
         <p>Sekarang kata-katanya adalah <b>kata biasa</b>. Tetap abaikan artinya dan jawab <b>warna tulisannya</b>.</p>
         <ul class="clean">
           <li>Tidak ada lagi umpan balik.</li>
-          <li>Ada <b>2 bagian</b>, masing-masing sekitar 2 menit, dengan jeda di tengah.</li>
+          <li>Ada <b>${N_TEST} soal</b> dalam satu sesi, sekitar 2 menit, tanpa jeda.</li>
         </ul>
         ${INPUT === "touch" ? touchCaps() : keyCaps()}
       </div>`);
     },
-    choices: ["Mulai bagian 1"],
+    choices: ["Mulai"],
     button_html: btn("primary"),
     data: { task: "instructions" },
-  };
-
-  const breakScreen = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: shell(`<div class="card">
-      <p class="eyebrow">Bagian 1 dari 2 selesai</p>
-      <h2>Istirahat sejenak</h2>
-      <p>Bagus! Regangkan jari dan tarik napas. Lanjutkan saat Anda siap.</p>
-      <p class="muted">Ingat: jawab <b>warna tulisan</b> secepat dan setepat mungkin.</p>
-    </div>`),
-    choices: ["Lanjut ke bagian 2"],
-    button_html: btn("primary"),
-    data: { task: "break" },
   };
 
   // GAD-7 (Spitzer et al., 2006). Indonesian wording: replace with the validated
@@ -467,7 +454,7 @@
     on_load: () => {
       const msg = document.getElementById("share-msg");
       document.getElementById("share").onclick = async () => {
-        const text = "Ikut eksperimen psikologi singkat (±10 menit): jawab warna kata secepat mungkin!";
+        const text = "Ikut eksperimen psikologi singkat (±5 menit): jawab warna kata secepat mungkin!";
         try {
           if (navigator.share) {
             await navigator.share({ title: "Tes Perhatian & Emosi", text: text, url: studyUrl });
@@ -497,11 +484,8 @@
     instructions,
     practiceLoop,
     startTest,
-    countdown("Bagian 1"),
-    { timeline: blockTrials(0) },
-    breakScreen,
-    countdown("Bagian 2"),
-    { timeline: blockTrials(1) },
+    countdown("Tugas utama dimulai"),
+    { timeline: testTrials },
     fullscreenOff,
     gad7,
     addEnd,
